@@ -1,0 +1,24 @@
+---
+deployment:
+  tasks:
+    # Définir le chemin de déploiement spécifique
+    - export DEPLOYPATH=/home/demi8284/frontend.sandrindossou.com
+
+    # Copier tous les fichiers vers le répertoire de déploiement
+    - /bin/cp -R * $DEPLOYPATH
+
+    # Définir les permissions appropriées
+    - find $DEPLOYPATH -type f -exec chmod 644 {} \;
+    - find $DEPLOYPATH -type d -exec chmod 755 {} \;
+
+    # Supprimer le fichier .cpanel.yml du répertoire public
+    - /bin/rm -f $DEPLOYPATH/.cpanel.yml
+
+    # Supprimer le dossier .git du répertoire public pour la sécurité
+    - /bin/rm -rf $DEPLOYPATH/.git
+
+    # Créer un fichier de log de déploiement
+    - echo "Déploiement effectué le $(date)" > $DEPLOYPATH/deployment.log
+
+    # Optionnel : Redémarrer les services si nécessaire
+    # - /usr/bin/killall -9 lsphp
