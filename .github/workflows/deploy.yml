@@ -1,0 +1,26 @@
+name: Deploy Project on push
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  web-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      # Étape 1 : Récupérer le code
+      - name: Get latest code
+        uses: actions/checkout@v2
+
+      # Étape 6 : Déployer les fichiers via FTP
+      - name: Upload only modified files (FTP)
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /
+         
