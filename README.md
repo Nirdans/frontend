@@ -42,7 +42,7 @@ TechForge est un site web moderne et responsive dédié aux services de conseil 
 - **Poids** : 400 (Regular), 600 (Semi-bold), 700 (Bold)
 
 ## 📁 Structure du Projet
-
+ 
 ```
 techforge/
 ├── index.html              # Page principale
