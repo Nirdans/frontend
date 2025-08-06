@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Site en Conception - TechForge</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+
+      .maintenance-container {
+        text-align: center;
+        max-width: 600px;
+        padding: 40px 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      .maintenance-icon {
+        font-size: 80px;
+        margin-bottom: 30px;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        font-weight: 300;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .subtitle {
+        font-size: 1.5rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+      }
+
+      .message {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 40px;
+        opacity: 0.8;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+        margin: 30px 0;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #00c9ff, #92fe9d);
+        width: 0%;
+        border-radius: 3px;
+        animation: loading 3s infinite;
+      }
+
+      @keyframes loading {
+        0% {
+          width: 0%;
+        }
+        50% {
+          width: 70%;
+        }
+        100% {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2rem;
+        }
+
+        .subtitle {
+          font-size: 1.2rem;
+        }
+
+        .maintenance-container {
+          margin: 20px;
+          padding: 30px 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="maintenance-container">
+      <div class="maintenance-icon">🔧</div>
+
+      <h1>Site en Conception</h1>
+
+      <div class="subtitle">
+        Nous créons quelque chose d'exceptionnel pour vous
+      </div>
+
+      <div class="message">
+        Notre site est actuellement en cours de conception. Nous travaillons dur
+        pour vous offrir une expérience web exceptionnelle qui répondra à tous
+        vos besoins.
+        <br /><br />
+        Restez connectés, nous arrivons bientôt !
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+    </div>
+
+    <script>
+      // Effet de particules en arrière-plan (optionnel)
+      document.addEventListener("DOMContentLoaded", function () {
+        // Animation de scintillement pour l'icône
+        const icon = document.querySelector(".maintenance-icon");
+        setInterval(() => {
+          icon.style.opacity = "0.7";
+          setTimeout(() => {
+            icon.style.opacity = "1";
+          }, 500);
+        }, 2000);
+      });
+    </script>
+  </body>
+</html>
