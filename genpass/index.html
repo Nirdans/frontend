@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Générateur de Mots de Passe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "purple-main": "#705bb8",
+              "purple-light": "#8b7ac7",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body
+    class="bg-purple-main min-h-screen flex items-center justify-center p-4"
+  >
+    <div class="bg-white rounded-2xl p-8 w-full max-w-md mx-auto">
+      <form class="space-y-6">
+        <div>
+          <label for="website" class="block text-gray-700 font-medium mb-2"
+            >Site web :</label
+          >
+          <input
+            type="text"
+            id="website"
+            placeholder="ex: www.gmail.com"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-main focus:border-transparent outline-none transition-all"
+          />
+        </div>
+
+        <div>
+          <label for="length" class="block text-gray-700 font-medium mb-2"
+            >Longueur du mot de passe :</label
+          >
+          <div class="relative">
+            <input
+              type="range"
+              id="length"
+              min="4"
+              max="50"
+              value="36"
+              class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+            />
+            <div class="flex justify-between text-xs text-gray-500 mt-1">
+              <span>4</span>
+              <span>50</span>
+            </div>
+          </div>
+          <div class="text-left mt-2">
+            <span id="lengthValue" class="text-gray-600 font-bold"
+              >36 caractères</span
+            >
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-gray-700 font-medium mb-3">Options :</label>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="flex items-center">
+              <input
+                type="checkbox"
+                id="uppercase"
+                checked
+                class="w-4 h-4 text-purple-main bg-gray-100 border-gray-300 rounded focus:ring-purple-main focus:ring-2"
+              />
+              <label for="uppercase" class="ml-2 text-gray-700 text-sm"
+                >Majuscules (A-Z)</label
+              >
+            </div>
+
+            <div class="flex items-center">
+              <input
+                type="checkbox"
+                id="lowercase"
+                checked
+                class="w-4 h-4 text-purple-main bg-gray-100 border-gray-300 rounded focus:ring-purple-main focus:ring-2"
+              />
+              <label for="lowercase" class="ml-2 text-gray-700 text-sm"
+                >Minuscules (a-z)</label
+              >
+            </div>
+
+            <div class="flex items-center">
+              <input
+                type="checkbox"
+                id="numbers"
+                checked
+                class="w-4 h-4 text-purple-main bg-gray-100 border-gray-300 rounded focus:ring-purple-main focus:ring-2"
+              />
+              <label for="numbers" class="ml-2 text-gray-700 text-sm"
+                >Chiffres (0-9)</label
+              >
+            </div>
+
+            <div class="flex items-center">
+              <input
+                type="checkbox"
+                id="symbols"
+                checked
+                class="w-4 h-4 text-purple-main bg-gray-100 border-gray-300 rounded focus:ring-purple-main focus:ring-2"
+              />
+              <label for="symbols" class="ml-2 text-gray-700 text-sm"
+                >Symboles (!@#$%)</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          id="generateBtn"
+          class="w-full bg-purple-main hover:bg-purple-light text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+        >
+          Générer un mot de passe
+        </button>
+
+        <div id="passwordResult" class="hidden">
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-gray-700 font-medium"
+                >Mot de passe généré :</label
+              >
+              <button
+                id="copyBtn"
+                class="flex items-center space-x-1 text-purple-main hover:text-purple-light transition-colors cursor-pointer"
+                title="Copier le mot de passe"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  ></path>
+                </svg>
+                <span class="text-sm">Copier</span>
+              </button>
+            </div>
+            <div
+              class="bg-white border rounded p-3 font-mono text-sm break-all select-all"
+              id="generatedPassword"
+            >
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div
+              id="strengthBar"
+              class="bg-blue-500 h-2 rounded-full transition-all duration-300"
+              style="width: 100%"
+            ></div>
+          </div>
+          <div class="text-center">
+            <span id="strengthText" class="text-blue-500 font-medium"
+              >Force: Très fort (100/100)</span
+            >
+          </div>
+        </div>
+      </form>
+
+      <div class="mt-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">
+          Mots de passe sauvegardés
+        </h2>
+
+        <div class="grid grid-cols-3 gap-4 mb-6">
+          <div
+            class="text-center p-4 bg-gray-50 rounded-lg border border-gray-200"
+          >
+            <div class="text-2xl font-bold text-blue-500">2</div>
+            <div class="text-sm text-gray-600">Total</div>
+          </div>
+          <div
+            class="text-center p-4 bg-gray-50 rounded-lg border border-gray-200"
+          >
+            <div class="text-2xl font-bold text-blue-500">0</div>
+            <div class="text-sm text-gray-600">Forts</div>
+          </div>
+          <div
+            class="text-center p-4 bg-gray-50 rounded-lg border border-gray-200"
+          >
+            <div class="text-2xl font-bold text-blue-500">16</div>
+            <div class="text-sm text-gray-600">Longueur moy.</div>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <div class="flex items-center justify-between">
+              <div class="flex-1">
+                <div class="font-bold text-gray-800">H</div>
+                <div class="text-sm text-gray-600">Créé le 8/6/2025</div>
+                <div class="text-sm text-gray-600">Force: 75/100 🟡</div>
+              </div>
+              <div class="flex space-x-2">
+                <button
+                  class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-sm font-medium transition-colors flex items-center space-x-1"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                  <span>Copier</span>
+                </button>
+                <button
+                  class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-sm font-medium transition-colors flex items-center space-x-1"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    ></path>
+                  </svg>
+                  <span>Supprimer</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <div class="flex items-center justify-between">
+              <div class="flex-1">
+                <div class="font-bold text-gray-800">aa</div>
+                <div class="text-sm text-gray-600">Créé le 8/6/2025</div>
+                <div class="text-sm text-gray-600">Force: 40/100 🔴</div>
+              </div>
+              <div class="flex space-x-2">
+                <button
+                  class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-sm font-medium transition-colors flex items-center space-x-1"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                  <span>Copier</span>
+                </button>
+                <button
+                  class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-sm font-medium transition-colors flex items-center space-x-1"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    ></path>
+                  </svg>
+                  <span>Supprimer</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const lengthSlider = document.getElementById("length");
+      const lengthValue = document.getElementById("lengthValue");
+
+      lengthSlider.addEventListener("input", function () {
+        lengthValue.textContent = this.value + " caractères";
+      });
+
+      document
+        .getElementById("generateBtn")
+        .addEventListener("click", function () {
+          const length = document.getElementById("length").value;
+          const useUppercase = document.getElementById("uppercase").checked;
+          const useLowercase = document.getElementById("lowercase").checked;
+          const useNumbers = document.getElementById("numbers").checked;
+          const useSymbols = document.getElementById("symbols").checked;
+
+          let charset = "";
+          if (useUppercase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          if (useLowercase) charset += "abcdefghijklmnopqrstuvwxyz";
+          if (useNumbers) charset += "0123456789";
+          if (useSymbols) charset += "!@#$%^&*()_+-=[]{}|;:,.<>?";
+
+          if (charset === "") {
+            alert("Veuillez sélectionner au moins une option !");
+            return;
+          }
+
+          let password = "";
+          for (let i = 0; i < length; i++) {
+            password += charset.charAt(
+              Math.floor(Math.random() * charset.length)
+            );
+          }
+
+          document.getElementById("generatedPassword").textContent = password;
+          document.getElementById("passwordResult").classList.remove("hidden");
+        });
+
+      document.getElementById("copyBtn").addEventListener("click", function () {
+        const passwordText =
+          document.getElementById("generatedPassword").textContent;
+
+        if (passwordText) {
+          navigator.clipboard
+            .writeText(passwordText)
+            .then(function () {
+              const copyBtn = document.getElementById("copyBtn");
+              const originalText = copyBtn.innerHTML;
+
+              copyBtn.innerHTML = `
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-sm">Copié !</span>
+            `;
+              copyBtn.classList.add("text-green-600");
+
+              setTimeout(function () {
+                copyBtn.innerHTML = originalText;
+                copyBtn.classList.remove("text-green-600");
+                copyBtn.classList.add("text-purple-main");
+              }, 2000);
+            })
+            .catch(function (err) {
+              console.error("Erreur lors de la copie: ", err);
+              alert("Erreur lors de la copie du mot de passe");
+            });
+        }
+      });
+    </script>
+
+  </body>
+</html>
